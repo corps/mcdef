@@ -36,6 +36,12 @@ func TestFindTerms(t *testing.T) {
 	}
 }
 
+func TestFindTermsIssue(t *testing.T) {
+	actualTerms, _ := FindTerms(otherTestText, JapaneseWordSplitter)
+
+	assert.Equal(t, []Term{Term{}, Term{}}, actualTerms)
+}
+
 func findTerm(expectedTerm Term, actualTerms []Term) *Term {
 	for _, actualTerm := range actualTerms {
 		if actualTerm.Reference == expectedTerm.Reference {
@@ -45,17 +51,32 @@ func findTerm(expectedTerm Term, actualTerms []Term) *Term {
 	return nil
 }
 
-var expectedTerms = []Term {
-	Term{Text: "伝えられ", Reference: "c", Definition: "伝えられ \u003d\u003e　伝える", Splits: []string {"られ", "伝", "え"}},
-	Term{Text: "マヘンドラパルバタ", Reference: "b", Definition: "マヘンドラパルバタ", Splits: []string {"マヘ", "ラパ", "タ", "ルバ", "ンド"}},
-	Term{Text: "アンコールワット", Reference: "アンコールワット", 
+var expectedTerms = []Term{
+	Term{Text: "伝えられ", Reference: "c", Definition: "伝えられ \u003d\u003e　伝える", Splits: []string{"られ", "伝", "え"}},
+	Term{Text: "マヘンドラパルバタ", Reference: "b", Definition: "マヘンドラパルバタ", Splits: []string{"マヘ", "ラパ", "タ", "ルバ", "ンド"}},
+	Term{Text: "アンコールワット", Reference: "アンコールワット",
 		Definition: "《「寺院町」の意》アンコールにある石造寺院遺跡。12世紀初め、クメール王朝スールヤバルマン2世の治下に建立。1992年、アンコールの他の遺跡とともに世界遺産（文化遺産）に登録された。",
-		Splits: []string {"ット", "ルワ", "アンコー"}},
-	Term{Text: "密林", Reference: "密林", Definition: "みつ‐りん【密林】\n樹木などがすきまのないほど生い茂っている林。", 
-		Splits: []string {"密", "林"}},
-	Term{Text: "碑文", Reference: "a", Definition: "ひ‐ぶん【碑文】 \n石碑に彫りつけた文章。碑銘。", 
-		Splits: []string {"碑", "文"}},
+		Splits:     []string{"ット", "ルワ", "アンコー"}},
+	Term{Text: "密林", Reference: "密林", Definition: "みつ‐りん【密林】\n樹木などがすきまのないほど生い茂っている林。",
+		Splits: []string{"密", "林"}},
+	Term{Text: "碑文", Reference: "a", Definition: "ひ‐ぶん【碑文】 \n石碑に彫りつけた文章。碑銘。",
+		Splits: []string{"碑", "文"}},
 }
+
+var otherTestText = `
+ Here's some [completely](abc) different thing. 
+
+ [abc]: /completely 
+ Ho ho. 
+
+
+ And something [else] for testing. 
+
+
+
+ [else]: /else 
+ For testing, yo.
+ `
 
 var testText = ` This text [will]: be included. 
 	
